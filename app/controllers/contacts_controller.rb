@@ -1,0 +1,157 @@
+class ContactsController < ApplicationController
+  before_action :require_login
+  before_action :find_contact, only: [:show, :edit, :update, :destroy, :roles, :groups, :tasks, :history, :analytics]
+  before_action :authorize_global, only: [:index, :show, :new, :create]
+  before_action :authorize_edit, only: [:edit, :update, :destroy]
+  
+  helper :sort
+  include SortHelper
+  helper :custom_fields
+  include CustomFieldsHelper
+  helper :attachments
+  include AttachmentsHelper
+  
+  def index
+    @contacts = Contact.visible(User.current)
+                      .includes(:author, :project)
+                      .order(sort_clause)
+                      .page(params[:page])
+    
+    respond_to do |format|
+      format.html
+      format.api
+      format.csv { send_data(contacts_to_csv(@contacts), filename: 'contacts.csv') }
+    end
+  end
+  
+  def show
+    @roles = @contact.roles.includes(:company)
+    @groups = @contact.groups.visible(User.current)
+    @issues = @contact.issues.visible(User.current)
+    
+    respond_to do |format|
+      format.html
+      format.api
+      format.vcf { send_data(@contact.to_vcard, filename: "#{@contact.name}.vcf") }
+    end
+  end
+  
+  def new
+    @contact = Contact.new(author: User.current)
+    @contact.safe_attributes = params[:contact]
+  end
+  
+  def create
+    @contact = Contact.new(author: User.current)
+    @contact.safe_attributes = params[:contact]
+    
+    if @contact.save
+      respond_to do |format|
+        format.html {
+          flash[:notice] = l(:notice_contact_created)
+          redirect_to contact_path(@contact)
+        }
+        format.api { render action: 'show', status: :created, location: contact_url(@contact) }
+      end
+    else
+      respond_to do |format|
+        format.html { render action: 'new' }
+        format.api { render_validation_errors(@contact) }
+      end
+    end
+  end
+  
+  def edit
+  end
+  
+  def update
+    @contact.safe_attributes = params[:contact]
+    
+    if @contact.save
+      respond_to do |format|
+        format.html {
+          flash[:notice] = l(:notice_contact_updated)
+          redirect_to contact_path(@contact)
+        }
+        format.api { render_api_ok }
+      end
+    else
+      respond_to do |format|
+        format.html { render action: 'edit' }
+        format.api { render_validation_errors(@contact) }
+      end
+    end
+  end
+  
+  def destroy
+    @contact.destroy
+    respond_to do |format|
+      format.html {
+        flash[:notice] = l(:notice_contact_deleted)
+        redirect_to contacts_path
+      }
+      format.api { render_api_ok }
+    end
+  end
+  
+  def roles
+    @roles = @contact.roles.includes(:company)
+  end
+  
+  def groups
+    @groups = @contact.groups.visible(User.current)
+  end
+  
+  def tasks
+    @issues = @contact.issues.visible(User.current)
+  end
+  
+  def history
+    @journals = @contact.journals.includes(:user).reorder('created_on DESC')
+  end
+  
+  def analytics
+    # Implementação futura de análises e BI
+  end
+  
+  def search
+    @contacts = Contact.visible(User.current)
+                      .where('LOWER(name) LIKE LOWER(?)', "%#{params[:q]}%")
+                      .limit(10)
+    
+    respond_to do |format|
+      format.json { render json: @contacts.map { |c| { id: c.id, text: c.name } } }
+    end
+  end
+  
+  def autocomplete
+    @contacts = Contact.visible(User.current)
+                      .where('LOWER(name) LIKE LOWER(?)', "%#{params[:q]}%")
+                      .limit(10)
+    render layout: false
+  end
+  
+  def import
+    if request.post? && params[:file].present?
+      count = Contact.import_csv(params[:file], User.current)
+      flash[:notice] = l(:notice_contacts_imported, count: count)
+      redirect_to contacts_path
+    end
+  end
+  
+  private
+  
+  def find_contact
+    @contact = Contact.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    render_404
+  end
+  
+  def authorize_edit
+    unless @contact.visible?(User.current)
+      deny_access
+      return false
+    end
+    true
+  end
+end
