@@ -1,0 +1,127 @@
+require File.expand_path('../../test_helper', __FILE__)
+
+class ContactsTest < ActionDispatch::IntegrationTest
+  include FotonContacts::TestHelper
+  
+  def setup
+    setup_contact_test
+  end
+  
+  def test_full_contact_workflow
+    log_user('contact_user', 'contact_user')
+    
+    # Criar uma nova pessoa
+    get '/contacts/new'
+    assert_response :success
+    
+    post '/contacts', params: {
+      contact: {
+        name: 'Integration Test Person',
+        contact_type: 'person',
+        email: 'test@integration.com',
+        status: 'active'
+      }
+    }
+    follow_redirect!
+    assert_response :success
+    
+    person = Contact.last
+    assert_equal 'Integration Test Person', person.name
+    
+    # Criar uma nova empresa
+    post '/contacts', params: {
+      contact: {
+        name: 'Integration Test Company',
+        contact_type: 'company',
+        status: 'active'
+      }
+    }
+    follow_redirect!
+    assert_response :success
+    
+    company = Contact.last
+    assert_equal 'Integration Test Company', company.name
+    
+    # Vincular pessoa à empresa
+    post '/contact_roles', params: {
+      contact_role: {
+        contact_id: person.id,
+        company_id: company.id,
+        position: 'Integration Tester',
+        status: 0
+      }
+    }
+    assert_response :redirect
+    
+    # Verificar vínculo
+    get "/contacts/#{person.id}/roles"
+    assert_response :success
+    assert_select 'table.contact-roles td', text: 'Integration Test Company'
+    
+    # Criar um grupo
+    post '/contact_groups', params: {
+      contact_group: {
+        name: 'Integration Test Group',
+        description: 'Group for integration testing'
+      }
+    }
+    follow_redirect!
+    assert_response :success
+    
+    group = ContactGroup.last
+    assert_equal 'Integration Test Group', group.name
+    
+    # Adicionar pessoa ao grupo
+    post "/contact_groups/#{group.id}/add_member", params: {
+      membership: {
+        contact_id: person.id,
+        role: 'Tester'
+      }
+    }
+    assert_response :redirect
+    
+    # Verificar membro do grupo
+    get "/contact_groups/#{group.id}"
+    assert_response :success
+    assert_select 'ul.contacts li', text: /Integration Test Person/
+    
+    # Criar uma tarefa e vincular o contato
+    issue = Issue.generate!(project: @project)
+    
+    post '/contact_issue_links', params: {
+      contact_issue_link: {
+        contact_id: person.id,
+        issue_id: issue.id,
+        role: 'Responsible'
+      }
+    }
+    assert_response :redirect
+    
+    # Verificar tarefa vinculada
+    get "/contacts/#{person.id}/tasks"
+    assert_response :success
+    assert_select 'table.issues td', text: /#{issue.subject}/
+    
+    # Atualizar contato
+    put "/contacts/#{person.id}", params: {
+      contact: {
+        name: 'Updated Integration Test Person'
+      }
+    }
+    follow_redirect!
+    assert_response :success
+    
+    # Verificar atualização
+    person.reload
+    assert_equal 'Updated Integration Test Person', person.name
+    
+    # Excluir contato
+    delete "/contacts/#{person.id}"
+    follow_redirect!
+    assert_response :success
+    
+    assert_raises(ActiveRecord::RecordNotFound) do
+      Contact.find(person.id)
+    end
+  end
+end
