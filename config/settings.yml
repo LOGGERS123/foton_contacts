@@ -1,0 +1,41 @@
+production:
+  contact_types:
+    - person
+    - company
+  role_statuses:
+    - active
+    - inactive
+    - discontinued
+  default_visibility: private
+  enable_groups: true
+  enable_issue_links: true
+  enable_custom_fields: true
+  enable_attachments: true
+
+development:
+  contact_types:
+    - person
+    - company
+  role_statuses:
+    - active
+    - inactive
+    - discontinued
+  default_visibility: private
+  enable_groups: true
+  enable_issue_links: true
+  enable_custom_fields: true
+  enable_attachments: true
+
+test:
+  contact_types:
+    - person
+    - company
+  role_statuses:
+    - active
+    - inactive
+    - discontinued
+  default_visibility: private
+  enable_groups: true
+  enable_issue_links: true
+  enable_custom_fields: true
+  enable_attachments: true
