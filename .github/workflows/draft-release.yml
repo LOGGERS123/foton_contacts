@@ -1,0 +1,26 @@
+name: 📦 Atualizar Rascunho de Release
+
+on:
+  push:
+    branches:
+      - develop
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  update-release-draft:
+    name: 📝 Atualizar Rascunho
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🔄 Checkout do repositório
+        uses: actions/checkout@v4
+
+      - name: 🚀 Executar Release Drafter
+        uses: release-drafter/release-drafter@v6
+        with:
+          config-name: release-drafter.yml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

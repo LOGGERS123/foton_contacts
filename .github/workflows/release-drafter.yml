@@ -1,0 +1,31 @@
+name: 🚀 Próxima Versão
+tag-template: 'v$NEXT_PATCH_VERSION'
+categories:
+  - title: ✨ Novas Funcionalidades
+    labels:
+      - feat
+  - title: 🐛 Correções de Bugs
+    labels:
+      - fix
+  - title: 📚 Atualizações de Documentação
+    labels:
+      - docs
+  - title: 🧼 Melhorias de Código
+    labels:
+      - refactor
+      - style
+  - title: 🧪 Testes
+    labels:
+      - test
+  - title: 🔧 Tarefas Técnicas
+    labels:
+      - chore
+change-template: '- $TITLE (#$NUMBER)'
+template: |
+  ## 📦 Mudanças nesta versão
+
+  $CHANGES
+
+  ---
+  🔖 Versão gerada automaticamente com base nos commits mesclados.
+  Para publicar, revise o conteúdo e clique em **Publish Release**.
