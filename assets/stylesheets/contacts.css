@@ -1,0 +1,132 @@
+/* Estilos para o plugin de contatos */
+
+/* Lista de contatos */
+table.contacts {
+  width: 100%;
+}
+
+table.contacts td.name {
+  font-weight: bold;
+}
+
+.contact-type-icon {
+  padding-left: 20px;
+  background-position: 0 50%;
+  background-repeat: no-repeat;
+}
+
+.person .contact-type-icon {
+  background-image: url(../images/person.png);
+}
+
+.company .contact-type-icon {
+  background-image: url(../images/company.png);
+}
+
+/* Detalhes do contato */
+.contact-details {
+  margin-top: 1em;
+}
+
+.contact-details .box {
+  margin-bottom: 1em;
+}
+
+.contact-roles td.buttons {
+  width: 15%;
+  text-align: right;
+}
+
+/* Status */
+tr.active td.status {
+  color: #019875;
+}
+
+tr.inactive td.status {
+  color: #999;
+}
+
+tr.discontinued td.status {
+  color: #e74c3c;
+}
+
+/* Formulários */
+.box.tabular label {
+  width: 150px;
+}
+
+.box.tabular input[type="text"],
+.box.tabular textarea {
+  width: 90%;
+}
+
+/* Grupos de contatos */
+ul.contact-groups {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+ul.contact-groups li {
+  margin-bottom: 0.5em;
+  padding: 5px;
+  border-bottom: 1px solid #eee;
+}
+
+ul.contact-groups li:last-child {
+  border-bottom: none;
+}
+
+.group-description {
+  color: #666;
+  font-size: 0.9em;
+  margin-top: 0.3em;
+}
+
+/* Ícones e botões */
+.icon-contact {
+  background-image: url(../images/contact.png);
+}
+
+.icon-group {
+  background-image: url(../images/group.png);
+}
+
+/* Responsividade */
+@media screen and (max-width: 899px) {
+  .splitcontentleft,
+  .splitcontentright {
+    width: 100%;
+    float: none;
+    margin-right: 0;
+  }
+  
+  .box.tabular label {
+    width: 100%;
+    float: none;
+    text-align: left;
+    margin-left: 0;
+  }
+  
+  .box.tabular input[type="text"],
+  .box.tabular textarea {
+    width: 95%;
+  }
+}
+
+/* Modal de importação */
+#import-dialog {
+  padding: 1em;
+}
+
+#import-dialog .buttons {
+  margin-top: 1em;
+  text-align: right;
+}
+
+/* Dicas e ajuda */
+.contact-help {
+  color: #666;
+  font-size: 0.9em;
+  margin-top: 0.2em;
+}
