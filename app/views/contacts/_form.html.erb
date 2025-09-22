@@ -1,0 +1,75 @@
+<%# app/views/contacts/_form.html.erb %>
+<%= error_messages_for @contact %>
+
+<div class="box tabular">
+  <p>
+    <%= f.select :contact_type,
+                [[l(:label_person), 'person'], [l(:label_company), 'company']],
+                required: true %>
+  </p>
+
+  <p>
+    <%= f.text_field :name, required: true, size: 60 %>
+  </p>
+
+  <p>
+    <%= f.text_field :email, size: 60 %>
+  </p>
+
+  <p>
+    <%= f.text_field :phone, size: 30 %>
+  </p>
+
+  <p>
+    <%= f.text_area :address, rows: 5 %>
+  </p>
+
+  <p>
+    <%= f.select :status,
+                [['Ativo', 'active'],
+                 ['Inativo', 'inactive'],
+                 ['Descontinuado', 'discontinued']],
+                required: true %>
+  </p>
+
+  <p>
+    <%= f.select :project_id,
+                @contact.allowed_target_projects.collect { |p| [p.name, p.id] },
+                include_blank: true %>
+  </p>
+
+  <p>
+    <%= f.text_area :description,
+                    cols: 60,
+                    rows: 15,
+                    class: 'wiki-edit',
+                    no_label: true %>
+  </p>
+
+  <p>
+    <%= f.check_box :is_private %>
+  </p>
+
+  <%= call_hook(:view_contacts_form_details, contact: @contact, form: f) %>
+</div>
+
+<%= javascript_tag do %>
+  $(document).ready(function() {
+    $('#contact_contact_type').change(function() {
+      toggleContactTypeFields();
+    });
+    
+    function toggleContactTypeFields() {
+      var type = $('#contact_contact_type').val();
+      if (type === 'person') {
+        $('.company-only').hide();
+        $('.person-only').show();
+      } else {
+        $('.company-only').show();
+        $('.person-only').hide();
+      }
+    }
+    
+    toggleContactTypeFields();
+  });
+<% end %>
