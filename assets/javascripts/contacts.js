@@ -1,37 +1,24 @@
 /* Scripts para o plugin de contatos */
 
 $(document).ready(function() {
-  // Inicialização do Select2 para campos de seleção
-  $('.select2').select2({
-    width: '60%',
-    allowClear: true
-  });
-  
-  // Autocompletar para campos de contato
-  $('.contact-autocomplete').each(function() {
-    var field = $(this);
-    var url = field.data('url');
-    
-    field.select2({
-      minimumInputLength: 1,
-      ajax: {
-        url: url,
-        dataType: 'json',
-        data: function(term) {
-          return { q: term };
-        },
-        results: function(data) {
-          return { results: data };
-        }
-      },
-      formatResult: function(item) {
-        return item.text;
-      },
-      formatSelection: function(item) {
-        return item.text;
+  // Funções de Modal (definidas globalmente para serem acessíveis por new.js.erb)
+  window.showModal = function(id) {
+    $('#' + id).dialog({
+      modal: true,
+      width: 'auto',
+      resizable: false,
+      close: function() {
+        $(this).dialog('destroy');
       }
     });
-  });
+  };
+
+  window.hideModal = function(element) {
+    $(element).closest('.ui-dialog-content').dialog('close');
+  };
+
+
+
   
   // Confirmações de exclusão
   $('form.button_to[data-confirm]').submit(function(){
@@ -51,24 +38,9 @@ $(document).ready(function() {
     }
   }
   
-  $('#contact_contact_type').change(updateFormFields);
+  // Dispara a função no change e no load
+  $('body').on('change', '#contact_contact_type', updateFormFields);
   updateFormFields();
-  
-  // Manipulação de modais
-  function showModal(id) {
-    $('#' + id).dialog({
-      modal: true,
-      width: 'auto',
-      resizable: false
-    });
-  }
-  
-  function hideModal(element) {
-    $(element).closest('.ui-dialog-content').dialog('close');
-  }
-  
-  window.showModal = showModal;
-  window.hideModal = hideModal;
   
   // Manipulação AJAX de formulários
   $(document).on('ajax:success', 'form[data-remote]', function(e, data) {
@@ -108,4 +80,53 @@ $(document).ready(function() {
       $(this).remove();
     });
   });
+
+  // Atualização dinâmica dos filtros (lógica do antigo contacts.js.erb)
+  var filterTimeout;
+  $('#query_form').on('change', 'input, select', function() {
+    clearTimeout(filterTimeout);
+    filterTimeout = setTimeout(function() {
+      var form = $('#query_form');
+      // Assegura que a requisição seja feita como JS para obter o HTML parcial
+      $.get(form.attr('action'), form.serialize(), null, 'script');
+    }, 500);
+  });
 });
+
+
+// ========= FUNÇÕES PARA VÍNCULOS COM EMPRESAS =========
+function addContactEmployment() {
+  const container = document.getElementById('contact-employments');
+  const template = container.dataset.template;
+  const regexp = new RegExp('NEW_RECORD', 'g');
+  const newId = new Date().getTime();
+  let newContent = template.replace(regexp, newId);
+  
+  // Corrige aspas quebradas (caso use template inline)
+  newContent = newContent.replace(/\\/g, '');
+  
+  container.insertAdjacentHTML('beforeend', newContent);
+  
+
+}
+
+function removeContactEmployment(element) {
+  const field = element.closest('.contact-employment-fields');
+  const destroyField = field.querySelector('input[name$="[_destroy]"]');
+  if (destroyField) {
+    destroyField.value = '1';
+    field.style.display = 'none';
+  }
+}
+
+function showTab(name) {
+  document.querySelectorAll('.tab-content').forEach(tab => {
+    tab.style.display = 'none';
+  });
+  document.querySelectorAll('.tabs li').forEach(li => {
+    li.classList.remove('selected');
+  });
+  document.getElementById(`tab-content-${name}`).style.display = 'block';
+  document.getElementById(`tab-${name}`).closest('li').classList.add('selected');
+}
+// ======================================================

@@ -1,132 +1,98 @@
-/* Estilos para o plugin de contatos */
-
-/* Lista de contatos */
-table.contacts {
-  width: 100%;
+/* Tab Content */
+.tab-content {
+  display: none;
 }
 
-table.contacts td.name {
-  font-weight: bold;
+.tab-content.selected {
+  display: block;
 }
 
-.contact-type-icon {
-  padding-left: 20px;
-  background-position: 0 50%;
-  background-repeat: no-repeat;
+/*
+ *= require tom-select.bootstrap5
+ */
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  border: 2px dashed #ddd;
+  border-radius: 8px;
+  margin-top: 20px;
 }
 
-.person .contact-type-icon {
-  background-image: url(../images/person.png);
+.empty-state__message {
+  font-size: 1.2em;
+  color: #777;
+  margin-bottom: 20px;
 }
 
-.company .contact-type-icon {
-  background-image: url(../images/company.png);
+.empty-state__button {
+  font-size: 1em;
+  padding: 10px 20px;
+  text-decoration: none;
 }
 
-/* Detalhes do contato */
-.contact-details {
-  margin-top: 1em;
+/*
+ * Turbo-Frame Modal Styles
+ * Uses the :has() pseudo-class to apply backdrop and styles
+ * when the modal is active, without extra HTML or JS.
+ */
+
+/* 1. Hide the modal frame by default */
+turbo-frame[id="modal"] {
+  display: none;
 }
 
-.contact-details .box {
-  margin-bottom: 1em;
-}
-
-.contact-roles td.buttons {
-  width: 15%;
-  text-align: right;
-}
-
-/* Status */
-tr.active td.status {
-  color: #019875;
-}
-
-tr.inactive td.status {
-  color: #999;
-}
-
-tr.discontinued td.status {
-  color: #e74c3c;
-}
-
-/* Formulários */
-.box.tabular label {
-  width: 150px;
-}
-
-.box.tabular input[type="text"],
-.box.tabular textarea {
+/* 2. Style the modal frame itself */
+turbo-frame[id="modal"][src],
+turbo-frame[id="modal"]:not(:empty) {
+  display: block;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1001;
+  background: #fff;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
   width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
-/* Grupos de contatos */
-ul.contact-groups {
-  margin: 0;
-  padding: 0;
-  list-style: none;
+/* 3. Create the backdrop and prevent body scroll when modal is active */
+body:has(turbo-frame[id="modal"][src]),
+body:has(turbo-frame[id="modal"]:not(:empty)) {
+  overflow: hidden; /* Prevent scrolling of the page behind */
 }
 
-ul.contact-groups li {
-  margin-bottom: 0.5em;
-  padding: 5px;
-  border-bottom: 1px solid #eee;
+body:has(turbo-frame[id="modal"][src])::before,
+body:has(turbo-frame[id="modal"]:not(:empty))::before {
+  content: "";
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+  backdrop-filter: blur(2px); /* Optional: nice blur effect */
 }
 
-ul.contact-groups li:last-child {
-  border-bottom: none;
+/* Spinner for form controller */
+.spinner {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  vertical-align: text-bottom;
+  border: .2em solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spinner-border .75s linear infinite;
 }
 
-.group-description {
-  color: #666;
-  font-size: 0.9em;
-  margin-top: 0.3em;
-}
-
-/* Ícones e botões */
-.icon-contact {
-  background-image: url(../images/contact.png);
-}
-
-.icon-group {
-  background-image: url(../images/group.png);
-}
-
-/* Responsividade */
-@media screen and (max-width: 899px) {
-  .splitcontentleft,
-  .splitcontentright {
-    width: 100%;
-    float: none;
-    margin-right: 0;
-  }
-  
-  .box.tabular label {
-    width: 100%;
-    float: none;
-    text-align: left;
-    margin-left: 0;
-  }
-  
-  .box.tabular input[type="text"],
-  .box.tabular textarea {
-    width: 95%;
-  }
-}
-
-/* Modal de importação */
-#import-dialog {
-  padding: 1em;
-}
-
-#import-dialog .buttons {
-  margin-top: 1em;
-  text-align: right;
-}
-
-/* Dicas e ajuda */
-.contact-help {
-  color: #666;
-  font-size: 0.9em;
-  margin-top: 0.2em;
+@keyframes spinner-border {
+  to { transform: rotate(360deg); }
 }

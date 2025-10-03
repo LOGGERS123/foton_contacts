@@ -1,0 +1,22 @@
+<%# app/views/contacts/analysis/_links.html.erb %>
+<%# Esta seção só faz sentido para contatos do tipo 'pessoa' %>
+<% if contact.person? %>
+  <div class="autoscroll">
+    <div class="splitcontentleft">
+      <h4><%= l(:label_active_links) %> (<%= contact.employments_as_person.active.count %>)</h4>
+      <% if contact.employments_as_person.any? %>
+        <ul>
+          <% contact.employments_as_person.each do |employment| %>
+            <li><%= employment.company.name %> (<%= employment.position %>)</li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="nodata"><%= l(:label_no_data) %></p>
+      <% end %>
+    </div>
+    <div class="splitcontentright">
+    </div>
+  </div>
+<% else %>
+  <p class="nodata"><%= l(:label_no_data) %></p>
+<% end %>

@@ -1,3 +1,24 @@
+## `./app/controllers/contact_issue_links_controller.rb`
+
+'''
+### ContactIssueLinksController
+
+  **Descrição:**  
+  Controlador responsável por gerenciar vínculos entre contatos e issues (tickets). Permite associar ou desassociar contatos de uma issue.
+
+  **Ações:**
+  - `create`: Cria um novo vínculo entre um contato e uma issue
+  - `destroy`: Remove um vínculo existente
+
+  **Filtros:**
+  - `require_login`: Exige que o usuário esteja logado
+  - `find_issue`: Carrega a issue com base em `params[:issue_id]`
+  - `find_contact_issue_link`: Localiza o vínculo específico a ser removido
+  - `authorize`: Verifica se o usuário tem permissão para gerenciar contatos no projeto
+
+---
+'''
+
 class ContactIssueLinksController < ApplicationController
   before_action :require_login
   before_action :find_issue

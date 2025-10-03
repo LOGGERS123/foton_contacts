@@ -1,12 +1,11 @@
-module FotonContacts
-  class Permissions
+class Permissions
     def self.register
       Redmine::AccessControl.map do |map|
         map.project_module :contacts do
           # Permissões básicas
           map.permission :view_contacts,
-                        {
-                          contacts: [:index, :show, :roles, :groups, :tasks, :history, :analytics],
+                        { # Ação 'roles' removida
+                          contacts: [:index, :show, :groups, :tasks, :history, :analytics],
                           contact_groups: [:index, :show]
                         },
                         read: true
@@ -14,13 +13,19 @@ module FotonContacts
           map.permission :manage_contacts,
                         {
                           contacts: [:new, :create, :edit, :update, :destroy, :import],
-                          contact_roles: [:create, :update, :destroy],
+                          # contact_roles: [:create, :update, :destroy], # Removido
                           contact_groups: [:new, :create, :edit, :update, :destroy, :add_member, :remove_member],
                           contact_issue_links: [:create, :destroy]
                         },
                         require: :loggedin
           
           # Permissões avançadas
+          map.permission :view_contacts_analytics,
+                        {
+                          contacts: [:analytics]
+                        },
+                        require: :loggedin
+
           map.permission :manage_contact_settings,
                         {
                           settings: [:plugin]
@@ -41,5 +46,4 @@ module FotonContacts
         end
       end
     end
-  end
 end

@@ -10,6 +10,11 @@ class ContactsTest < ActionDispatch::IntegrationTest
   def test_full_contact_workflow
     log_user('contact_user', 'contact_user')
     
+    # Acessar a listagem de contatos
+    get '/contacts'
+    assert_response :success
+    assert_select 'h2', text: 'Contatos'
+
     # Criar uma nova pessoa
     get '/contacts/new'
     assert_response :success
@@ -27,7 +32,17 @@ class ContactsTest < ActionDispatch::IntegrationTest
     
     person = Contact.last
     assert_equal 'Integration Test Person', person.name
+
+    # Verificar se o link para o perfil existe na listagem
+    get '/contacts'
+    assert_response :success
+    assert_select "a[href=?]", "/contacts/#{person.id}", text: 'Integration Test Person'
     
+    # Acessar a página de perfil da pessoa
+    get "/contacts/#{person.id}"
+    assert_response :success
+    assert_select 'h2', text: 'Integration Test Person'
+
     # Criar uma nova empresa
     post '/contacts', params: {
       contact: {
@@ -43,20 +58,25 @@ class ContactsTest < ActionDispatch::IntegrationTest
     assert_equal 'Integration Test Company', company.name
     
     # Vincular pessoa à empresa
-    post '/contact_roles', params: {
-      contact_role: {
-        contact_id: person.id,
-        company_id: company.id,
-        position: 'Integration Tester',
-        status: 0
+    put "/contacts/#{person.id}", params: {
+      contact: {
+        employments_as_person_attributes: {
+          '0' => {
+            company_id: company.id,
+            position: 'Integration Tester'
+          }
+        }
       }
     }
-    assert_response :redirect
+    follow_redirect!
+    assert_response :success
     
     # Verificar vínculo
-    get "/contacts/#{person.id}/roles"
-    assert_response :success
-    assert_select 'table.contact-roles td', text: 'Integration Test Company'
+    person.reload
+    assert_equal 1, person.employments_as_person.count
+    assert_equal 'Integration Tester', person.employments_as_person.first.position
+    assert_select 'td', text: 'Integration Test Company'
+    assert_select 'td', text: 'Integration Tester'
     
     # Criar um grupo
     post '/contact_groups', params: {
@@ -98,9 +118,9 @@ class ContactsTest < ActionDispatch::IntegrationTest
     assert_response :redirect
     
     # Verificar tarefa vinculada
-    get "/contacts/#{person.id}/tasks"
+    get "/contacts/#{person.id}"
     assert_response :success
-    assert_select 'table.issues td', text: /#{issue.subject}/
+    assert_select 'div#tab-issues td.subject', text: /#{issue.subject}/
     
     # Atualizar contato
     put "/contacts/#{person.id}", params: {

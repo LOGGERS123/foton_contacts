@@ -1,0 +1,25 @@
+<%= turbo_frame_tag "contact_employees_list" do %>
+<h3>l(:label_contact_employments)</h3>
+<% if @employees.present? %>
+  <table class="list">
+    <thead>
+      <tr>
+        <th><%= l(:label_employee) %></th>
+        <th><%= l(:field_position) %></th>
+        <th><%= l(:field_status) %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @employees.each do |role| %>
+        <tr class="contact-role">
+          <td><%= link_to role.person.name, contact_path(role.person) %></td>
+          <td><%= role.position %></td>
+          <td><span class="status <%= role.status %>"><%= l("label_#{role.status}") %></span></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <%= render partial: 'common/empty_state', locals: { message: l(:label_no_employees_for_company) } %>
+<% end %>
+<% end %>

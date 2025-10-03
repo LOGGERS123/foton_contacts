@@ -1,0 +1,32 @@
+<div class="autoscroll">
+  <div class="splitcontent">
+    <div class="splitcontentleft">
+      <% begin %>
+        <% issues_by_status = @contact.issues.group(:status).count %>
+        <% if issues_by_status.empty? %>
+          <p class="nodata"><%= l(:label_no_data_to_display) %></p>
+        <% else %>
+          <%= pie_chart issues_by_status, title: l(:label_issues_by_status), empty: l(:label_no_data_to_display) %>
+        <% end %>
+      <% rescue => e %>
+        <p class="nodata"><%= l(:label_chart_error) %>: <%= e.message %></p>
+      <% end %>
+    </div>
+    </div>
+    <div class="splitcontentright">
+      <% begin %>
+        <%= column_chart @contact.issues.group_by_day(:start_date, time_zone: Time.zone).count, 
+                                  title: l(:label_issues_by_creation_date), 
+                                  empty: l(:label_no_data_to_display),
+                                  library: { time: { tooltipFormat: 'DD/MM/YYYY' } } 
+        %>
+      <% rescue => e %>
+        <p class="nodata"><%= l(:label_chart_error) %>: <%= e.message %></p>
+      <% end %>
+
+
+  </div>
+  <div style="clear:both;"></div>
+\ No newline at end of file
+</div>
+
